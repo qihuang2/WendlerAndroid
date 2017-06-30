@@ -2,6 +2,7 @@ package com.android.wendler.wendlerandroid.di.module;
 
 import com.android.wendler.wendlerandroid.di.scope.ActivityScope;
 import com.android.wendler.wendlerandroid.main.contract.LoginContract;
+import com.android.wendler.wendlerandroid.main.interactor.LoginInteractor;
 import com.android.wendler.wendlerandroid.main.presenter.LoginPresenter;
 import com.android.wendler.wendlerandroid.main.view.login.LoginActivity;
 import com.google.android.gms.auth.api.Auth;
@@ -10,6 +11,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import dagger.Module;
 import dagger.Provides;
+import retrofit2.Retrofit;
 
 /**
  * Created by QiFeng on 6/30/17.
@@ -34,8 +36,14 @@ public class LoginModule {
 
     @Provides
     @ActivityScope
-    public LoginContract.Presenter providesPresenter(){
-        return new LoginPresenter();
+    public LoginContract.Interactor providesLoginInteractor(Retrofit retrofit){
+        return new LoginInteractor(retrofit);
+    }
+
+    @Provides
+    @ActivityScope
+    public LoginContract.Presenter providesPresenter(LoginContract.Interactor interactor){
+        return new LoginPresenter(interactor);
     }
 
     @Provides

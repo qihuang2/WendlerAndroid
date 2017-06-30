@@ -1,0 +1,173 @@
+package com.android.wendler.wendlerandroid.main.model;
+
+import android.content.SharedPreferences;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.android.wendler.wendlerandroid.utils.SharedPrefUtils;
+
+/**
+ * Created by QiFeng on 6/30/17.
+ */
+
+public class User implements Parcelable{
+    String id;
+    String firstName;
+    String lastName;
+    String email;
+    transient String token;
+    Lift deadLift;
+    Lift squat;
+    Lift overhead;
+    Lift bench;
+
+
+    public static User loadFromSP(SharedPreferences sharedPreferences){
+        User user = new User(
+                sharedPreferences.getString(SharedPrefUtils.KEY_ID, null),
+                sharedPreferences.getString(SharedPrefUtils.KEY_FIRST_NAME, null),
+                sharedPreferences.getString(SharedPrefUtils.KEY_LAST_NAME, null),
+                sharedPreferences.getString(SharedPrefUtils.KEY_EMAIL_NAME, null),
+                new Lift(sharedPreferences.getInt(SharedPrefUtils.KEY_DL_MAX, 0), sharedPreferences.getInt(SharedPrefUtils.KEY_DL_WEEK, 0)),
+                new Lift(sharedPreferences.getInt(SharedPrefUtils.KEY_SQ_MAX, 0), sharedPreferences.getInt(SharedPrefUtils.KEY_SQ_WEEK, 0)),
+                new Lift(sharedPreferences.getInt(SharedPrefUtils.KEY_BE_MAX, 0), sharedPreferences.getInt(SharedPrefUtils.KEY_BE_WEEK, 0)),
+                new Lift(sharedPreferences.getInt(SharedPrefUtils.KEY_OH_MAX, 0), sharedPreferences.getInt(SharedPrefUtils.KEY_OH_WEEK, 0))
+        );
+        user.setToken(sharedPreferences.getString(SharedPrefUtils.KEY_TOKEN, null));
+
+        return user;
+    }
+
+    public User(String id,
+                String firstName,
+                String lastName,
+                String email,
+                Lift deadLift,
+                Lift squat,
+                Lift bench,
+                Lift overhead){
+
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.deadLift = deadLift;
+        this.squat = squat;
+        this.bench = bench;
+        this.overhead = overhead;
+    }
+
+
+    protected User(Parcel in) {
+        id = in.readString();
+        firstName = in.readString();
+        lastName = in.readString();
+        email = in.readString();
+        deadLift = in.readParcelable(Lift.class.getClassLoader());
+        squat = in.readParcelable(Lift.class.getClassLoader());
+        overhead = in.readParcelable(Lift.class.getClassLoader());
+        bench = in.readParcelable(Lift.class.getClassLoader());
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Lift getDeadLift() {
+        return deadLift;
+    }
+
+    public void setDeadLift(Lift deadLift) {
+        this.deadLift = deadLift;
+    }
+
+    public Lift getSquat() {
+        return squat;
+    }
+
+    public void setSquat(Lift squat) {
+        this.squat = squat;
+    }
+
+    public Lift getOverhead() {
+        return overhead;
+    }
+
+    public void setOverhead(Lift overhead) {
+        this.overhead = overhead;
+    }
+
+    public Lift getBench() {
+        return bench;
+    }
+
+    public void setBench(Lift bench) {
+        this.bench = bench;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(firstName);
+        parcel.writeString(lastName);
+        parcel.writeString(email);
+        parcel.writeString(token);
+        parcel.writeParcelable(deadLift, i);
+        parcel.writeParcelable(squat, i);
+        parcel.writeParcelable(bench, i);
+        parcel.writeParcelable(overhead, i);
+    }
+}

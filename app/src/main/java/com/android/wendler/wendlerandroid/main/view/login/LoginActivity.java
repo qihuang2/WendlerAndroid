@@ -1,5 +1,6 @@
 package com.android.wendler.wendlerandroid.main.view.login;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,11 +11,15 @@ import com.android.wendler.wendlerandroid.R;
 import com.android.wendler.wendlerandroid.WendlerApplication;
 import com.android.wendler.wendlerandroid.di.module.LoginModule;
 import com.android.wendler.wendlerandroid.main.contract.LoginContract;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.android.wendler.wendlerandroid.main.model.User;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import javax.inject.Inject;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by QiFeng on 6/30/17.
@@ -23,9 +28,10 @@ import javax.inject.Inject;
 public class LoginActivity extends AppCompatActivity implements LoginContract.View,
         GoogleApiClient.OnConnectionFailedListener{
 
+    private static final int SIGN_IN_REQUEST = 15;
+
     @Inject LoginContract.Presenter mPresenter;
     @Inject SharedPreferences mSharedPreferences;
-    @Inject GoogleSignInOptions mGoogleSignInOptions;
     @Inject GoogleApiClient mGoogleApiClient;
 
 
@@ -36,10 +42,28 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         WendlerApplication.getAppComponent(getApplication())
                 .plus(new LoginModule(this, getString(R.string.default_web_client_id)))
                 .inject(this);
+
+        mPresenter.bind(this);
+        ButterKnife.bind(this);
+    }
+
+    @OnClick(R.id.google_sign_in)
+    protected void onSignInClicked(){
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, SIGN_IN_REQUEST);
     }
 
     @Override
-    public void showProgress() {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SIGN_IN_REQUEST){
+            mPresenter.activityResult(Auth.GoogleSignInApi.getSignInResultFromIntent(data));
+        }
+    }
+
+    @Override
+    public void showProgress(boolean show) {
 
     }
 
@@ -54,12 +78,24 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     @Override
-    public void login() {
+    public void showGoogleSignInError() {
+
+    }
+
+    @Override
+    public void login(User user) {
 
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.unbind();
     }
 }

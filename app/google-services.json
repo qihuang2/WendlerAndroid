@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "928937382841",
+    "project_id": "firebase-wendler"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928937382841:android:2af83ad71a7bc4fc",
+        "android_client_info": {
+          "package_name": "com.android.wendler.wendlerandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928937382841-7bd67qjdhf4sidmdom34lh7q070mj4qf.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "928937382841-29nlcn4g72ths7s4ff7vt9h82jop0rmj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.wendler.wendlerandroid",
+            "certificate_hash": "e2b57a4805f81e6bd9980b6beadc86debcc27455"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL73CqTXHqJ4HyGSXs6Ovx2mD2WDQmvPg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

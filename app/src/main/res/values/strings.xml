@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Wendler</string>
     <string name="skip">Skip</string>
+    <string name="bad_connection">Could not find connection.</string>
+    <string name="server_error">There was a problem communicating with the server.</string>
+    <string name="google_signin_error">There was a problem signing into Google.</string>
 </resources>

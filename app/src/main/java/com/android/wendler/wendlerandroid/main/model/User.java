@@ -38,6 +38,25 @@ public class User implements Parcelable{
         return user;
     }
 
+    public static void saveToSP(SharedPreferences preferences, User user){
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putString(SharedPrefUtils.KEY_ID, user.getId());
+        editor.putString(SharedPrefUtils.KEY_FIRST_NAME, user.getFirstName());
+        editor.putString(SharedPrefUtils.KEY_LAST_NAME, user.getLastName());
+        editor.putString(SharedPrefUtils.KEY_EMAIL_NAME, user.getEmail());
+        editor.putInt(SharedPrefUtils.KEY_DL_MAX, user.getDeadLift().getMax());
+        editor.putInt(SharedPrefUtils.KEY_DL_WEEK, user.getDeadLift().getWeek());
+        editor.putInt(SharedPrefUtils.KEY_SQ_MAX, user.getSquat().getMax());
+        editor.putInt(SharedPrefUtils.KEY_SQ_WEEK, user.getSquat().getWeek());
+        editor.putInt(SharedPrefUtils.KEY_OH_MAX, user.getOverhead().getMax());
+        editor.putInt(SharedPrefUtils.KEY_OH_WEEK, user.getOverhead().getWeek());
+        editor.putInt(SharedPrefUtils.KEY_BE_MAX, user.getBench().getMax());
+        editor.putInt(SharedPrefUtils.KEY_BE_WEEK, user.getBench().getWeek());
+
+        editor.apply();
+    }
+
     public User(String id,
                 String firstName,
                 String lastName,
@@ -67,6 +86,19 @@ public class User implements Parcelable{
         squat = in.readParcelable(Lift.class.getClassLoader());
         overhead = in.readParcelable(Lift.class.getClassLoader());
         bench = in.readParcelable(Lift.class.getClassLoader());
+    }
+
+
+    public void update(User user){
+        id = user.getId();
+        firstName = user.getFirstName();
+        lastName = user.getLastName();
+        email = user.getEmail();
+        deadLift = user.getDeadLift();
+        overhead = user.getOverhead();
+        squat = user.getSquat();
+        bench = user.getBench();
+        token = user.getToken();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

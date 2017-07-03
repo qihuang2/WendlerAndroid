@@ -23,6 +23,9 @@ public class SharedPrefUtils {
     public static final String KEY_OH_WEEK = "sp_key_oh_week";
     public static final String KEY_OH_MAX = "sp_key_oh_max";
 
-    public static final String KEY_TOKEN = "sp+key_token";
+    public static final String KEY_TOKEN = "sp_key_token";
+
+    public static final String KEY_SHOW_LOGIN = "sp_key_show_login";
+
 
 }

@@ -6,12 +6,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.android.wendler.wendlerandroid.MainActivity;
 import com.android.wendler.wendlerandroid.R;
 import com.android.wendler.wendlerandroid.WendlerApplication;
 import com.android.wendler.wendlerandroid.di.module.LoginModule;
 import com.android.wendler.wendlerandroid.main.contract.LoginContract;
 import com.android.wendler.wendlerandroid.main.model.User;
+import com.android.wendler.wendlerandroid.utils.SharedPrefUtils;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -26,13 +31,23 @@ import butterknife.OnClick;
  */
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View,
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final int SIGN_IN_REQUEST = 15;
 
-    @Inject LoginContract.Presenter mPresenter;
-    @Inject SharedPreferences mSharedPreferences;
-    @Inject GoogleApiClient mGoogleApiClient;
+    @Inject
+    LoginContract.Presenter mPresenter;
+
+    @Inject
+    SharedPreferences mSharedPreferences;
+
+    @Inject
+    GoogleApiClient mGoogleApiClient;
+
+    @Inject
+    ProgressBar vPrgoressBar;
+
+    @Inject User mUser;
 
 
     @Override
@@ -48,7 +63,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     @OnClick(R.id.google_sign_in)
-    protected void onSignInClicked(){
+    protected void onSignInClicked() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, SIGN_IN_REQUEST);
     }
@@ -57,39 +72,47 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == SIGN_IN_REQUEST){
+        if (requestCode == SIGN_IN_REQUEST) {
             mPresenter.activityResult(Auth.GoogleSignInApi.getSignInResultFromIntent(data));
         }
     }
 
     @Override
     public void showProgress(boolean show) {
-
+        vPrgoressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public void showBadConnectionToast() {
-
+        Toast.makeText(this, R.string.bad_connection, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showServerErrorToast() {
-
+        Toast.makeText(this, R.string.server_error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showGoogleSignInError() {
-
+        Toast.makeText(this, R.string.google_signin_error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void login(User user) {
+        mPresenter.unbind();
 
+        mSharedPreferences.edit().putBoolean(SharedPrefUtils.KEY_SHOW_LOGIN, false).apply();
+        User.saveToSP(mSharedPreferences, user);
+        mUser.update(user);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        showGoogleSignInError();
     }
 
 

@@ -42,5 +42,4 @@ public class AppModule {
     public User providesUser(SharedPreferences sharedPreferences){
         return User.loadFromSP(sharedPreferences);
     }
-
 }

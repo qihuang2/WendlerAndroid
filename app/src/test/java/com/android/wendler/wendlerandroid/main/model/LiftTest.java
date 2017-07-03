@@ -13,13 +13,13 @@ public class LiftTest {
     Lift mLift;
 
     @Before
-    void setup(){
+    public void setup(){
         mLift = new Lift(130, 3);
     }
 
 
     @Test
-    void checkStats(){
+    public void checkStats(){
         assertEquals(mLift.getMax(), 130);
         assertEquals(mLift.getWeek(), 3);
     }

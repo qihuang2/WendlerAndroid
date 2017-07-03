@@ -23,6 +23,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -44,10 +45,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Inject
     GoogleApiClient mGoogleApiClient;
 
-    @Inject
+    @BindView(R.id.progress_bar)
     ProgressBar vPrgoressBar;
 
-    @Inject User mUser;
+    @Inject
+    User mUser;
 
 
     @Override
@@ -102,7 +104,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         mPresenter.unbind();
 
         mSharedPreferences.edit().putBoolean(SharedPrefUtils.KEY_SHOW_LOGIN, false).apply();
-        User.saveToSP(mSharedPreferences, user);
+        User.saveToSP(mSharedPreferences.edit(), user);
         mUser.update(user);
 
         Intent intent = new Intent(this, MainActivity.class);

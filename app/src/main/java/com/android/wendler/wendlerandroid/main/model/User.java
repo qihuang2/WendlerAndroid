@@ -38,8 +38,7 @@ public class User implements Parcelable{
         return user;
     }
 
-    public static void saveToSP(SharedPreferences preferences, User user){
-        SharedPreferences.Editor editor = preferences.edit();
+    public static void saveToSP(SharedPreferences.Editor editor, User user){
 
         editor.putString(SharedPrefUtils.KEY_ID, user.getId());
         editor.putString(SharedPrefUtils.KEY_FIRST_NAME, user.getFirstName());
@@ -53,6 +52,8 @@ public class User implements Parcelable{
         editor.putInt(SharedPrefUtils.KEY_OH_WEEK, user.getOverhead().getWeek());
         editor.putInt(SharedPrefUtils.KEY_BE_MAX, user.getBench().getMax());
         editor.putInt(SharedPrefUtils.KEY_BE_WEEK, user.getBench().getWeek());
+
+        editor.putString(SharedPrefUtils.KEY_TOKEN, user.getToken());
 
         editor.apply();
     }

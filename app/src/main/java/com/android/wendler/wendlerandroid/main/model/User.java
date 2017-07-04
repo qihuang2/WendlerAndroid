@@ -5,24 +5,45 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.android.wendler.wendlerandroid.utils.SharedPrefUtils;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by QiFeng on 6/30/17.
  */
 
-public class User implements Parcelable{
+public class User implements Parcelable {
+
+    @Expose
+    @SerializedName("_id")
     String id;
+
+    @Expose
     String firstName;
+
+    @Expose
     String lastName;
+
+    @Expose
     String email;
-    transient String token;
-    Lift deadLift;
+
+    @Expose(serialize = false)
+    String token;
+
+    @Expose
+    Lift deadlift;
+
+    @Expose
     Lift squat;
+
+    @Expose
     Lift overhead;
+
+    @Expose
     Lift bench;
 
 
-    public static User loadFromSP(SharedPreferences sharedPreferences){
+    public static User loadFromSP(SharedPreferences sharedPreferences) {
         User user = new User(
                 sharedPreferences.getString(SharedPrefUtils.KEY_ID, null),
                 sharedPreferences.getString(SharedPrefUtils.KEY_FIRST_NAME, null),
@@ -33,12 +54,13 @@ public class User implements Parcelable{
                 new Lift(sharedPreferences.getInt(SharedPrefUtils.KEY_BE_MAX, 0), sharedPreferences.getInt(SharedPrefUtils.KEY_BE_WEEK, 0)),
                 new Lift(sharedPreferences.getInt(SharedPrefUtils.KEY_OH_MAX, 0), sharedPreferences.getInt(SharedPrefUtils.KEY_OH_WEEK, 0))
         );
+
         user.setToken(sharedPreferences.getString(SharedPrefUtils.KEY_TOKEN, null));
 
         return user;
     }
 
-    public static void saveToSP(SharedPreferences preferences, User user){
+    public static void saveToSP(SharedPreferences preferences, User user) {
 
         SharedPreferences.Editor editor = preferences.edit();
 
@@ -46,8 +68,8 @@ public class User implements Parcelable{
         editor.putString(SharedPrefUtils.KEY_FIRST_NAME, user.getFirstName());
         editor.putString(SharedPrefUtils.KEY_LAST_NAME, user.getLastName());
         editor.putString(SharedPrefUtils.KEY_EMAIL_NAME, user.getEmail());
-        editor.putInt(SharedPrefUtils.KEY_DL_MAX, user.getDeadLift().getMax());
-        editor.putInt(SharedPrefUtils.KEY_DL_WEEK, user.getDeadLift().getWeek());
+        editor.putInt(SharedPrefUtils.KEY_DL_MAX, user.getDeadlift().getMax());
+        editor.putInt(SharedPrefUtils.KEY_DL_WEEK, user.getDeadlift().getWeek());
         editor.putInt(SharedPrefUtils.KEY_SQ_MAX, user.getSquat().getMax());
         editor.putInt(SharedPrefUtils.KEY_SQ_WEEK, user.getSquat().getWeek());
         editor.putInt(SharedPrefUtils.KEY_OH_MAX, user.getOverhead().getMax());
@@ -67,13 +89,13 @@ public class User implements Parcelable{
                 Lift deadLift,
                 Lift squat,
                 Lift bench,
-                Lift overhead){
+                Lift overhead) {
 
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.deadLift = deadLift;
+        this.deadlift = deadLift;
         this.squat = squat;
         this.bench = bench;
         this.overhead = overhead;
@@ -85,19 +107,19 @@ public class User implements Parcelable{
         firstName = in.readString();
         lastName = in.readString();
         email = in.readString();
-        deadLift = in.readParcelable(Lift.class.getClassLoader());
+        deadlift = in.readParcelable(Lift.class.getClassLoader());
         squat = in.readParcelable(Lift.class.getClassLoader());
         overhead = in.readParcelable(Lift.class.getClassLoader());
         bench = in.readParcelable(Lift.class.getClassLoader());
     }
 
 
-    public void update(User user){
+    public void update(User user) {
         id = user.getId();
         firstName = user.getFirstName();
         lastName = user.getLastName();
         email = user.getEmail();
-        deadLift = user.getDeadLift();
+        deadlift = user.getDeadlift();
         overhead = user.getOverhead();
         squat = user.getSquat();
         bench = user.getBench();
@@ -156,12 +178,12 @@ public class User implements Parcelable{
         this.token = token;
     }
 
-    public Lift getDeadLift() {
-        return deadLift;
+    public Lift getDeadlift() {
+        return deadlift;
     }
 
-    public void setDeadLift(Lift deadLift) {
-        this.deadLift = deadLift;
+    public void setDeadlift(Lift deadlift) {
+        this.deadlift = deadlift;
     }
 
     public Lift getSquat() {
@@ -200,7 +222,7 @@ public class User implements Parcelable{
         parcel.writeString(lastName);
         parcel.writeString(email);
         parcel.writeString(token);
-        parcel.writeParcelable(deadLift, i);
+        parcel.writeParcelable(deadlift, i);
         parcel.writeParcelable(squat, i);
         parcel.writeParcelable(bench, i);
         parcel.writeParcelable(overhead, i);

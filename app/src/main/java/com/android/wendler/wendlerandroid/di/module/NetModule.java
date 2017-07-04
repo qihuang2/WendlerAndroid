@@ -29,6 +29,7 @@ public class NetModule {
     @Singleton
     public Gson providesGson(){
         return new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .excludeFieldsWithoutExposeAnnotation()
                 .create();
     }
 

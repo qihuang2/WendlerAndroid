@@ -3,13 +3,18 @@ package com.android.wendler.wendlerandroid.main.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Created by QiFeng on 6/30/17.
  */
 
 public class Lift implements Parcelable{
 
+    @Expose
     int max;
+
+    @Expose
     int week;
 
     public Lift(int max, int week){

@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 
 import com.android.wendler.wendlerandroid.utils.SharedPrefUtils;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -90,8 +93,8 @@ public class UserTest {
         verify(editor).putString(SharedPrefUtils.KEY_LAST_NAME, mUser.getLastName());
         verify(editor).putString(SharedPrefUtils.KEY_EMAIL_NAME, mUser.getEmail());
 
-        verify(editor).putInt(SharedPrefUtils.KEY_DL_WEEK, mUser.getDeadLift().getWeek());
-        verify(editor).putInt(SharedPrefUtils.KEY_DL_MAX, mUser.getDeadLift().getMax());
+        verify(editor).putInt(SharedPrefUtils.KEY_DL_WEEK, mUser.getDeadlift().getWeek());
+        verify(editor).putInt(SharedPrefUtils.KEY_DL_MAX, mUser.getDeadlift().getMax());
 
         verify(editor).putInt(SharedPrefUtils.KEY_SQ_MAX, mUser.getSquat().getMax());
         verify(editor).putInt(SharedPrefUtils.KEY_SQ_WEEK, mUser.getSquat().getWeek());
@@ -103,5 +106,47 @@ public class UserTest {
         verify(editor).putInt(SharedPrefUtils.KEY_OH_WEEK, mUser.getOverhead().getWeek());
 
         verify(editor).putString(SharedPrefUtils.KEY_TOKEN, mUser.getToken());
+    }
+
+    private static final String json = "{\n" +
+            "\"_id\": \"108034432866128207149\",\n" +
+            "\"first_name\": \"john\",\n" +
+            "\"last_name\": \"conner\",\n" +
+            "\"email\": \"rer@gmail.com\",\n" +
+            "\"__v\": 0,\n" +
+            "\"overhead\": {\"max\": 10, \"week\": 0},\n" +
+            "\"bench\": {\"max\": 100, \"week\": 0},\n" +
+            "\"squat\": {\"max\": 10, \"week\": 1},\n" +
+            "\"deadlift\": {\"max\": 10, \"week\": 0},\n" +
+            "\"token\": \"test_token\"\n" +
+            "}";
+
+    @Test
+    public void gsonTest(){
+        Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .excludeFieldsWithoutExposeAnnotation()
+                .create();
+
+        User user = gson.fromJson(json, User.class);
+
+        assertEquals(user.getId(), "108034432866128207149");
+        assertEquals(user.getFirstName(), "john");
+        assertEquals(user.getLastName(), "conner");
+        assertEquals(user.getEmail(), "rer@gmail.com");
+        assertEquals(user.getToken(), "test_token");
+
+        assertEquals(user.getOverhead().getMax(), 10);
+        assertEquals(user.getOverhead().getWeek(), 0);
+
+        assertEquals(user.getDeadlift().getWeek(), 0);
+        assertEquals(user.getDeadlift().getMax(), 10);
+
+        assertEquals(user.getBench().getMax(), 100);
+        assertEquals(user.getBench().getWeek(), 0);
+
+        assertEquals(user.getSquat().getMax(), 10);
+        assertEquals(user.getSquat().getWeek(), 1);
+
+       // System.out.println(gson.toJson(user));
     }
 }

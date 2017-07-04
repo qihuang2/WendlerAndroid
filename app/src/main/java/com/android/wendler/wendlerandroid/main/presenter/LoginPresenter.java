@@ -17,9 +17,10 @@ import io.reactivex.schedulers.Schedulers;
 
 public class LoginPresenter implements LoginContract.Presenter {
 
-    private LoginContract.View mView;
-    private LoginContract.Interactor mInteractor;
-    private Disposable mDisposable;
+    LoginContract.View mView;
+    LoginContract.Interactor mInteractor;
+
+    Disposable mDisposable;
 
     public LoginPresenter(LoginContract.Interactor interactor){
         mInteractor = interactor;
@@ -59,7 +60,9 @@ public class LoginPresenter implements LoginContract.Presenter {
         }
     }
 
-    private void attemptLogin(String token){
+    void attemptLogin(String token){
+        if (token == null) return;
+
         mDisposable = mInteractor.attemptLogin(token)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

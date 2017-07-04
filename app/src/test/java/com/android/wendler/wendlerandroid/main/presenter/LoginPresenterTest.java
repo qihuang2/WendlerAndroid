@@ -1,26 +1,32 @@
 package com.android.wendler.wendlerandroid.main.presenter;
 
 import com.android.wendler.wendlerandroid.main.contract.LoginContract;
-import com.android.wendler.wendlerandroid.main.model.Lift;
 import com.android.wendler.wendlerandroid.main.model.User;
 import com.android.wendler.wendlerandroid.testUtils.ImmediateScheduler;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
+import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
-import java.util.concurrent.Callable;
-
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
-import io.reactivex.android.plugins.RxAndroidPlugins;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
-import io.reactivex.plugins.RxJavaPlugins;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -35,30 +41,101 @@ public class LoginPresenterTest {
     @Mock
     public LoginContract.Interactor mInteractor;
 
+    @Mock
+    LoginContract.View mView;
+
+    @InjectMocks
+    LoginPresenter mLoginPresenter;
 
     @Mock
-    private User mUser;
+    GoogleSignInResult mGoogleSignInResult;
 
     @Before
     public void setUp() {
-
-        mUser = new User(
-                "123",
-                "Qi",
-                "Huang",
-                "email",
-                new Lift(123,2),
-                new Lift(12, 0),
-                new Lift(140, 1),
-                new Lift(100, 3)
-        );
-
-
-        when(mInteractor.attemptLogin(anyString())).thenReturn(
-                Observable.just(mUser)
-        );
-
         ImmediateScheduler.initSchedulers();
+
+        assertNull(mLoginPresenter.mView);
+
+        mLoginPresenter.bind(mView);
+        assertNotNull(mLoginPresenter.mView);
+
+        assertNotNull(mLoginPresenter.mInteractor);
     }
 
+    @After
+    public void cleanUp(){
+        mLoginPresenter.unbind();
+        assertNull(mLoginPresenter.mView);
+        assertNull(mLoginPresenter.mDisposable);
+    }
+
+    @Test
+    public void activityResultBad(){
+
+        //isSuccess returns false
+        mLoginPresenter.activityResult(mGoogleSignInResult);
+        verify(mView).showGoogleSignInError();
+    }
+
+
+    @Test
+    public void activityResultAccountNull(){
+
+        // account is null
+        when(mGoogleSignInResult.isSuccess()).thenReturn(true);
+        when(mGoogleSignInResult.getSignInAccount()).thenReturn(null);
+
+        mLoginPresenter.activityResult(mGoogleSignInResult);
+
+        verify(mView).showGoogleSignInError();
+    }
+
+    @Test
+    public void activityResultGood(){
+
+        GoogleSignInAccount account = mock(GoogleSignInAccount.class);
+        LoginPresenter loginSpy = spy(mLoginPresenter);
+
+        when(mGoogleSignInResult.isSuccess()).thenReturn(true);
+        when(mGoogleSignInResult.getSignInAccount()).thenReturn(account);
+        when(account.getIdToken()).thenReturn("token");
+        doNothing().when(loginSpy).attemptLogin(anyString());
+
+        loginSpy.activityResult(mGoogleSignInResult);
+
+        verify(mView, never()).showGoogleSignInError();
+        verify(loginSpy).attemptLogin(anyString());
+    }
+
+
+    @Test
+    public void attemptLoginIn(){
+        User user = mock(User.class);
+
+        when(mInteractor.attemptLogin(anyString())).thenReturn(
+                Observable.just(user)
+        );
+
+        mLoginPresenter.attemptLogin(anyString());
+
+        assertNotNull(mLoginPresenter.mDisposable);
+
+        InOrder inOrder = inOrder(mView);
+        inOrder.verify(mView).showProgress(true);
+        inOrder.verify(mView).login(user);
+        inOrder.verify(mView).showProgress(false);
+    }
+
+    @Test
+    public void attemptLoginFail(){
+        when(mInteractor.attemptLogin(anyString()))
+                .thenReturn(Observable.<User>error(new Throwable("Fake error")));
+
+        mLoginPresenter.attemptLogin(anyString());
+
+        InOrder inOrder = inOrder(mView);
+        inOrder.verify(mView).showProgress(true);
+        inOrder.verify(mView).showBadConnectionToast();
+        inOrder.verify(mView).showProgress(false);
+    }
 }

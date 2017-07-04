@@ -38,7 +38,9 @@ public class User implements Parcelable{
         return user;
     }
 
-    public static void saveToSP(SharedPreferences.Editor editor, User user){
+    public static void saveToSP(SharedPreferences preferences, User user){
+
+        SharedPreferences.Editor editor = preferences.edit();
 
         editor.putString(SharedPrefUtils.KEY_ID, user.getId());
         editor.putString(SharedPrefUtils.KEY_FIRST_NAME, user.getFirstName());

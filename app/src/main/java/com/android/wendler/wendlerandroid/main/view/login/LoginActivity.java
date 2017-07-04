@@ -104,7 +104,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         mPresenter.unbind();
 
         mSharedPreferences.edit().putBoolean(SharedPrefUtils.KEY_SHOW_LOGIN, false).apply();
-        User.saveToSP(mSharedPreferences.edit(), user);
+        User.saveToSP(mSharedPreferences, user);
         mUser.update(user);
 
         Intent intent = new Intent(this, MainActivity.class);

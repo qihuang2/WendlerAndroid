@@ -1,5 +1,6 @@
 package com.android.wendler.wendlerandroid.main.model;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 
 import com.android.wendler.wendlerandroid.utils.SharedPrefUtils;
@@ -12,7 +13,9 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by QiFeng on 7/3/17.
@@ -25,10 +28,8 @@ public class UserTest {
     @Mock
     SharedPreferences mSharedPreferences;
 
-    @Mock
-    SharedPreferences.Editor mEditor;
 
-    User mUser;
+    private User mUser;
 
     @Before
     public void setup() {
@@ -74,28 +75,33 @@ public class UserTest {
     }
 
 
+    @SuppressLint("CommitPrefEdits")
     @Test
     public void testWrite() {
 
-        User.saveToSP(mEditor, mUser);
+        SharedPreferences.Editor editor = mock(SharedPreferences.Editor.class);
 
-        verify(mEditor).putString(SharedPrefUtils.KEY_ID, mUser.getId());
-        verify(mEditor).putString(SharedPrefUtils.KEY_FIRST_NAME, mUser.getFirstName());
-        verify(mEditor).putString(SharedPrefUtils.KEY_LAST_NAME, mUser.getLastName());
-        verify(mEditor).putString(SharedPrefUtils.KEY_EMAIL_NAME, mUser.getEmail());
+        when(mSharedPreferences.edit()).thenReturn(editor);
 
-        verify(mEditor).putInt(SharedPrefUtils.KEY_DL_WEEK, mUser.getDeadLift().getWeek());
-        verify(mEditor).putInt(SharedPrefUtils.KEY_DL_MAX, mUser.getDeadLift().getMax());
+        User.saveToSP(mSharedPreferences, mUser);
 
-        verify(mEditor).putInt(SharedPrefUtils.KEY_SQ_MAX, mUser.getSquat().getMax());
-        verify(mEditor).putInt(SharedPrefUtils.KEY_SQ_WEEK, mUser.getSquat().getWeek());
+        verify(editor).putString(SharedPrefUtils.KEY_ID, mUser.getId());
+        verify(editor).putString(SharedPrefUtils.KEY_FIRST_NAME, mUser.getFirstName());
+        verify(editor).putString(SharedPrefUtils.KEY_LAST_NAME, mUser.getLastName());
+        verify(editor).putString(SharedPrefUtils.KEY_EMAIL_NAME, mUser.getEmail());
 
-        verify(mEditor).putInt(SharedPrefUtils.KEY_BE_MAX, mUser.getBench().getMax());
-        verify(mEditor).putInt(SharedPrefUtils.KEY_BE_WEEK, mUser.getBench().getWeek());
+        verify(editor).putInt(SharedPrefUtils.KEY_DL_WEEK, mUser.getDeadLift().getWeek());
+        verify(editor).putInt(SharedPrefUtils.KEY_DL_MAX, mUser.getDeadLift().getMax());
 
-        verify(mEditor).putInt(SharedPrefUtils.KEY_OH_MAX, mUser.getOverhead().getMax());
-        verify(mEditor).putInt(SharedPrefUtils.KEY_OH_WEEK, mUser.getOverhead().getWeek());
+        verify(editor).putInt(SharedPrefUtils.KEY_SQ_MAX, mUser.getSquat().getMax());
+        verify(editor).putInt(SharedPrefUtils.KEY_SQ_WEEK, mUser.getSquat().getWeek());
 
-        verify(mEditor).putString(SharedPrefUtils.KEY_TOKEN, mUser.getToken());
+        verify(editor).putInt(SharedPrefUtils.KEY_BE_MAX, mUser.getBench().getMax());
+        verify(editor).putInt(SharedPrefUtils.KEY_BE_WEEK, mUser.getBench().getWeek());
+
+        verify(editor).putInt(SharedPrefUtils.KEY_OH_MAX, mUser.getOverhead().getMax());
+        verify(editor).putInt(SharedPrefUtils.KEY_OH_WEEK, mUser.getOverhead().getWeek());
+
+        verify(editor).putString(SharedPrefUtils.KEY_TOKEN, mUser.getToken());
     }
 }

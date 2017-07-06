@@ -1,4 +1,4 @@
-package com.android.wendler.wendlerandroid.main.view.launch;
+package com.android.wendler.wendlerandroid.main.view.activity.launch;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,9 +7,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.android.wendler.wendlerandroid.MainActivity;
+import com.android.wendler.wendlerandroid.R;
+import com.android.wendler.wendlerandroid.main.view.activity.main.MainActivity;
 import com.android.wendler.wendlerandroid.WendlerApplication;
-import com.android.wendler.wendlerandroid.main.view.login.LoginActivity;
+import com.android.wendler.wendlerandroid.main.view.activity.login.LoginActivity;
 import com.android.wendler.wendlerandroid.utils.SharedPrefUtils;
 
 import javax.inject.Inject;
@@ -36,7 +37,9 @@ public class LaunchActivity extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
+
         boolean showLogin = mSharedPreferences.getBoolean(SharedPrefUtils.KEY_SHOW_LOGIN, true);
+
         startActivity(showLogin ? LoginActivity.class : MainActivity.class);
     }
 

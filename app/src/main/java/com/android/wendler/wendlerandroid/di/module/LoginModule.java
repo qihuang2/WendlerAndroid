@@ -4,7 +4,7 @@ import com.android.wendler.wendlerandroid.di.scope.ActivityScope;
 import com.android.wendler.wendlerandroid.main.contract.LoginContract;
 import com.android.wendler.wendlerandroid.main.interactor.LoginInteractor;
 import com.android.wendler.wendlerandroid.main.presenter.LoginPresenter;
-import com.android.wendler.wendlerandroid.main.view.login.LoginActivity;
+import com.android.wendler.wendlerandroid.main.view.activity.login.LoginActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;

@@ -1,4 +1,4 @@
-package com.android.wendler.wendlerandroid.main.view.login;
+package com.android.wendler.wendlerandroid.main.view.activity.login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.wendler.wendlerandroid.MainActivity;
+import com.android.wendler.wendlerandroid.main.view.activity.main.MainActivity;
 import com.android.wendler.wendlerandroid.R;
 import com.android.wendler.wendlerandroid.WendlerApplication;
 import com.android.wendler.wendlerandroid.di.module.LoginModule;
@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     GoogleApiClient mGoogleApiClient;
 
     @BindView(R.id.progress_bar)
-    ProgressBar vPrgoressBar;
+    ProgressBar vProgressBar;
 
     @Inject
     User mUser;
@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
         WendlerApplication.getAppComponent(getApplication())
                 .plus(new LoginModule(this, getString(R.string.default_web_client_id)))
@@ -70,6 +71,17 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         startActivityForResult(signInIntent, SIGN_IN_REQUEST);
     }
 
+    @OnClick(R.id.skip)
+    protected void onSkipClicked(){
+//        mSharedPreferences.edit()
+//                .putBoolean(SharedPrefUtils.KEY_SHOW_LOGIN, false)
+//                .apply();
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -81,7 +93,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showProgress(boolean show) {
-        vPrgoressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        vProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override

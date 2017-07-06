@@ -4,4 +4,10 @@
     <string name="bad_connection">Could not find connection.</string>
     <string name="server_error">There was a problem communicating with the server.</string>
     <string name="google_signin_error">There was a problem signing into Google.</string>
+    <string name="lifts">Lifts</string>
+    <string name="history">History</string>
+
+
+    <string name="week_format">week: %1$d</string>
+    <string name="max_format">max: %1$d</string>
 </resources>

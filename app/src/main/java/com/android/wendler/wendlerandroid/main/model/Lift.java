@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by QiFeng on 6/30/17.
@@ -12,19 +13,29 @@ import com.google.gson.annotations.Expose;
 public class Lift implements Parcelable{
 
     @Expose
+    @SerializedName("_id")
+    String id;
+
+    @Expose
     int max;
 
     @Expose
     int week;
 
-    public Lift(int max, int week){
+    @Expose
+    String name;
+
+    public Lift(String name, int max, int week){
         this.max = max;
         this.week = week;
+        this.name = name;
     }
 
     protected Lift(Parcel in) {
         max = in.readInt();
         week = in.readInt();
+        name = in.readString();
+
     }
 
     public static final Creator<Lift> CREATOR = new Creator<Lift>() {
@@ -55,6 +66,23 @@ public class Lift implements Parcelable{
         this.week = week;
     }
 
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -65,5 +93,6 @@ public class Lift implements Parcelable{
 
         parcel.writeInt(max);
         parcel.writeInt(week);
+        parcel.writeString(name);
     }
 }

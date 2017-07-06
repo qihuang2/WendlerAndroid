@@ -10,4 +10,5 @@
 
     <string name="week_format">week: %1$d</string>
     <string name="max_format">max: %1$d</string>
+    <string name="advance_week">Advance week</string>
 </resources>

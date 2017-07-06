@@ -12,8 +12,6 @@ import com.android.wendler.wendlerandroid.utils.FragmentAdapter;
 public class MainFragmentAdapter implements FragmentAdapter {
 
 
-
-
     @Override
     public int getCount() {
         return 2;

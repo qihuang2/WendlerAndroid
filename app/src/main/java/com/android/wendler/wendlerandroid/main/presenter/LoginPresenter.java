@@ -1,5 +1,7 @@
 package com.android.wendler.wendlerandroid.main.presenter;
 
+import android.util.Log;
+
 import com.android.wendler.wendlerandroid.main.contract.LoginContract;
 import com.android.wendler.wendlerandroid.main.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;

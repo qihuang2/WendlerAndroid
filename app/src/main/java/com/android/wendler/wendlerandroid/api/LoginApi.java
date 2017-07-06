@@ -6,6 +6,7 @@ import com.android.wendler.wendlerandroid.main.model.User;
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 /**
@@ -14,8 +15,8 @@ import retrofit2.http.POST;
 
 public interface LoginApi {
 
+    @Headers("Content-Type: application/json")
     @POST("/login")
-    @FormUrlEncoded
     Observable<User> attemptLogin(@Body LoginBody body);
 
 }

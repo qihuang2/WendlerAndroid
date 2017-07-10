@@ -33,6 +33,8 @@
             android:name=".main.view.activity.login.LoginActivity"
         />
 
+        <activity android:name=".main.view.activity.set.SetActivity"/>
+
     </application>
 
 </manifest>

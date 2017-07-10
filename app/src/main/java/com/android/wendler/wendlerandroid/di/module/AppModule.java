@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.android.wendler.wendlerandroid.main.model.User;
+import com.google.gson.Gson;
 
 import javax.inject.Singleton;
 
@@ -39,7 +40,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public User providesUser(SharedPreferences sharedPreferences){
-        return User.loadFromSP(sharedPreferences);
+    public User providesUser(SharedPreferences sharedPreferences, Gson gson){
+        return User.loadFromSP(sharedPreferences, gson);
     }
 }

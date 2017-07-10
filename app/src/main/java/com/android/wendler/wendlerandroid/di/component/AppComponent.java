@@ -5,6 +5,7 @@ import com.android.wendler.wendlerandroid.di.module.LiftModule;
 import com.android.wendler.wendlerandroid.di.module.LoginModule;
 import com.android.wendler.wendlerandroid.di.module.MainActivityModule;
 import com.android.wendler.wendlerandroid.di.module.NetModule;
+import com.android.wendler.wendlerandroid.di.module.SetModule;
 import com.android.wendler.wendlerandroid.main.view.activity.launch.LaunchActivity;
 
 import javax.inject.Singleton;
@@ -22,6 +23,7 @@ public interface AppComponent {
     LoginComponent plus(LoginModule loginModule);
     MainActivityComponent plus(MainActivityModule mainActivityModule);
     LiftComponent plus(LiftModule module);
+    SetComponent plus(SetModule module);
 
     void inject(LaunchActivity launchActivity);
 }

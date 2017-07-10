@@ -20,6 +20,7 @@ import com.android.wendler.wendlerandroid.utils.SharedPrefUtils;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.gson.Gson;
 
 import javax.inject.Inject;
 
@@ -50,6 +51,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Inject
     User mUser;
+
+    @Inject
+    Gson mGson;
 
 
     @Override
@@ -116,7 +120,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         mPresenter.unbind();
 
         mSharedPreferences.edit().putBoolean(SharedPrefUtils.KEY_SHOW_LOGIN, false).apply();
-        User.saveToSP(mSharedPreferences, user);
+        User.saveToSP(mSharedPreferences, user, mGson);
         mUser.update(user);
 
         Intent intent = new Intent(this, MainActivity.class);

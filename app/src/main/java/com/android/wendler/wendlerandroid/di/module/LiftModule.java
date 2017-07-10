@@ -2,7 +2,7 @@ package com.android.wendler.wendlerandroid.di.module;
 
 import com.android.wendler.wendlerandroid.di.scope.FragmentScope;
 import com.android.wendler.wendlerandroid.main.model.User;
-import com.android.wendler.wendlerandroid.main.view.fragment.LiftRvAdapter;
+import com.android.wendler.wendlerandroid.main.view.fragment.lift.rv.LiftRvAdapter;
 
 import dagger.Module;
 import dagger.Provides;

@@ -11,4 +11,11 @@
     <string name="week_format">week: %1$d</string>
     <string name="max_format">max: %1$d</string>
     <string name="advance_week">Advance week</string>
+
+    <string name="x_percent">%1$d%%</string>
+    
+    <plurals name="rep">
+        <item quantity="one">%d rep</item>
+        <item quantity="other">%d reps</item>
+    </plurals>
 </resources>

@@ -1,6 +1,7 @@
-package com.android.wendler.wendlerandroid.main.view.fragment;
+package com.android.wendler.wendlerandroid.main.view.fragment.lift;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,8 @@ import com.android.wendler.wendlerandroid.R;
 import com.android.wendler.wendlerandroid.WendlerApplication;
 import com.android.wendler.wendlerandroid.di.component.LiftComponent;
 import com.android.wendler.wendlerandroid.di.module.LiftModule;
+import com.android.wendler.wendlerandroid.main.view.activity.set.SetActivity;
+import com.android.wendler.wendlerandroid.main.view.fragment.lift.rv.LiftRvAdapter;
 
 import javax.inject.Inject;
 
@@ -26,7 +29,7 @@ import butterknife.Unbinder;
  * Created by QiFeng on 7/5/17.
  */
 
-public class LiftFragment extends Fragment{
+public class LiftFragment extends Fragment implements LiftRvAdapter.OnLiftClick {
 
     @BindView(R.id.recycler_view)
     RecyclerView vRecyclerView;
@@ -37,11 +40,13 @@ public class LiftFragment extends Fragment{
     @Inject
     LiftRvAdapter mLiftRvAdapter;
 
+    private static final int REQUEST_SET = 12;
+
     private LiftComponent mLiftComponent;
     private Unbinder mUnbinder;
 
 
-    public static LiftFragment newInstance(){
+    public static LiftFragment newInstance() {
         return new LiftFragment();
     }
 
@@ -50,7 +55,7 @@ public class LiftFragment extends Fragment{
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (mLiftComponent == null){
+        if (mLiftComponent == null) {
             mLiftComponent = WendlerApplication.getAppComponent(getActivity().getApplication())
                     .plus(new LiftModule());
 
@@ -66,6 +71,7 @@ public class LiftFragment extends Fragment{
         View root = inflater.inflate(R.layout.fragment_lift, container, false);
         mUnbinder = ButterKnife.bind(this, root);
 
+        mLiftRvAdapter.setOnLiftClick(this);
         vRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         vRecyclerView.setAdapter(mLiftRvAdapter);
 
@@ -76,5 +82,19 @@ public class LiftFragment extends Fragment{
     public void onDestroyView() {
         super.onDestroyView();
         mUnbinder.unbind();
+    }
+
+    @Override
+    public void liftClicked(int index) {
+        Intent intent = SetActivity.getIntent(getActivity(), index);
+        startActivityForResult(intent, REQUEST_SET);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SET && mLiftRvAdapter != null) {
+            mLiftRvAdapter.notifyDataSetChanged();
+        }
     }
 }

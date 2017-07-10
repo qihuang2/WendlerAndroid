@@ -14,7 +14,7 @@ public class LiftTest {
 
     @Before
     public void setup(){
-        mLift = new Lift("test", 130, 3);
+        mLift = new Lift("test", 130, 3, 5);
     }
 
 

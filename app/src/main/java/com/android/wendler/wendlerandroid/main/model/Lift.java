@@ -2,6 +2,7 @@ package com.android.wendler.wendlerandroid.main.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -25,17 +26,22 @@ public class Lift implements Parcelable{
     @Expose
     String name;
 
-    public Lift(String name, int max, int week){
+    @Expose
+    int advance;
+
+    public Lift(String name, int max, int week, int advance){
         this.max = max;
         this.week = week;
         this.name = name;
+        this.advance = advance;
     }
 
     protected Lift(Parcel in) {
+        id = in.readString();
         max = in.readInt();
         week = in.readInt();
         name = in.readString();
-
+        advance = in.readInt();
     }
 
     public static final Creator<Lift> CREATOR = new Creator<Lift>() {
@@ -66,6 +72,16 @@ public class Lift implements Parcelable{
         this.week = week;
     }
 
+    public void advanceWeek(){
+        week++;
+        if (week > 3){
+            max += advance;
+            week = 0;
+        }
+
+        Log.d("Lift", "advanceWeek: "+week);
+    }
+
 
     public String getId() {
         return id;
@@ -90,9 +106,10 @@ public class Lift implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-
+        parcel.writeString(id);
         parcel.writeInt(max);
         parcel.writeInt(week);
         parcel.writeString(name);
+        parcel.writeInt(advance);
     }
 }

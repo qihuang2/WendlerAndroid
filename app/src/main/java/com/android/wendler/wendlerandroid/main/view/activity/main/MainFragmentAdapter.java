@@ -2,7 +2,7 @@ package com.android.wendler.wendlerandroid.main.view.activity.main;
 
 import android.support.v4.app.Fragment;
 
-import com.android.wendler.wendlerandroid.main.view.fragment.LiftFragment;
+import com.android.wendler.wendlerandroid.main.view.fragment.lift.LiftFragment;
 import com.android.wendler.wendlerandroid.utils.FragmentAdapter;
 
 /**

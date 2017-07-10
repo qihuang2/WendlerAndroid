@@ -6,14 +6,21 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.wendler.wendlerandroid.R;
+import com.android.wendler.wendlerandroid.WendlerApplication;
+import com.android.wendler.wendlerandroid.di.module.SetModule;
 import com.android.wendler.wendlerandroid.main.contract.SetContract;
 import com.android.wendler.wendlerandroid.main.model.Lift;
 import com.android.wendler.wendlerandroid.main.model.User;
+import com.android.wendler.wendlerandroid.main.view.activity.set.rv.SetRvAdapter;
+import com.google.gson.Gson;
 
 import javax.inject.Inject;
 
@@ -25,11 +32,13 @@ import butterknife.OnClick;
  * Created by QiFeng on 7/6/17.
  */
 
-public class SetActivity extends AppCompatActivity implements View.OnClickListener, SetContract.View{
+public class SetActivity extends AppCompatActivity implements View.OnClickListener, SetContract.View {
 
     private static final String ARG_LIFT = "arg_lift";
 
     private Lift mLift;
+
+    private SetRvAdapter mSetRvAdapter;
 
     @BindView(R.id.toolbar)
     Toolbar vToolbar;
@@ -44,12 +53,15 @@ public class SetActivity extends AppCompatActivity implements View.OnClickListen
     SharedPreferences mSharedPreferences;
 
     @Inject
+    Gson mGson;
+
+    @Inject
     User mUser;
 
 
-    public static Intent getIntent(Activity origin, Lift lift){
+    public static Intent getIntent(Activity origin, int index) {
         Intent i = new Intent(origin, SetActivity.class);
-        i.putExtra(ARG_LIFT, lift);
+        i.putExtra(ARG_LIFT, index);
         return i;
     }
 
@@ -58,20 +70,27 @@ public class SetActivity extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set);
 
-        ButterKnife.bind(this);
+        WendlerApplication.getAppComponent(getApplication())
+                .plus(new SetModule())
+                .inject(this);
 
-        mLift = getIntent().getParcelableExtra(ARG_LIFT);
+        ButterKnife.bind(this);
+        mPresenter.bindView(this);
+
+        mLift = mUser.getLifts().get(getIntent().getIntExtra(ARG_LIFT, 0));
         vToolbar.setTitle(mLift.getName());
         vToolbar.setNavigationOnClickListener(this);
 
-        mPresenter.bindView(this);
+        mSetRvAdapter = new SetRvAdapter(mLift);
 
+        vRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        vRecyclerView.setAdapter(mSetRvAdapter);
     }
 
 
     @OnClick(R.id.advance)
-    protected void onAdvanceClick(){
-        mPresenter.advanceWeek();
+    protected void onAdvanceClick() {
+        mPresenter.advanceWeek(mUser, mLift);
     }
 
     @Override
@@ -81,8 +100,14 @@ public class SetActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void advanceWeek() {
-        User.saveToSP(mSharedPreferences, mUser);
+        User.saveToSP(mSharedPreferences, mUser, mGson);
+        Toast.makeText(this, "Updated week", Toast.LENGTH_SHORT).show();
         finish();
+    }
+
+    @Override
+    public void showConnectionError() {
+        Toast.makeText(this, R.string.bad_connection, Toast.LENGTH_SHORT).show();
     }
 
     @Override

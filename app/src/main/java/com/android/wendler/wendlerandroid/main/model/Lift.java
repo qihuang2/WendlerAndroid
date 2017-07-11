@@ -78,8 +78,6 @@ public class Lift implements Parcelable{
             max += advance;
             week = 0;
         }
-
-        Log.d("Lift", "advanceWeek: "+week);
     }
 
 

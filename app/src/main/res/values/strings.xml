@@ -13,7 +13,9 @@
     <string name="advance_week">Advance week</string>
 
     <string name="x_percent">%1$d%%</string>
-    
+    <string name="edit">Edit</string>
+    <string name="save">save</string>
+
     <plurals name="rep">
         <item quantity="one">%d rep</item>
         <item quantity="other">%d reps</item>

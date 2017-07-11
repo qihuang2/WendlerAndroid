@@ -1,7 +1,5 @@
 package com.android.wendler.wendlerandroid.main.presenter;
 
-import android.util.Log;
-
 import com.android.wendler.wendlerandroid.main.contract.SetContract;
 import com.android.wendler.wendlerandroid.main.model.Lift;
 import com.android.wendler.wendlerandroid.main.model.User;
@@ -30,6 +28,7 @@ public class SetPresenter implements SetContract.Presenter {
         lift.advanceWeek();
         mView.advanceWeek();
 
+        if (user.getToken() == null) return;
         mInteractor.updateUser(user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
